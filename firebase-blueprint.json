@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "complexes": {
+      "title": "Conjuntos Residenciales",
+      "description": "Información de los conjuntos residenciales registrados.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Nombre del conjunto" },
+        "address": { "type": "string", "description": "Dirección del conjunto" },
+        "adminLink": { "type": "string", "description": "Link de pagos de administración" },
+        "waterLink": { "type": "string", "description": "Link de pagos de agua" },
+        "lightLink": { "type": "string", "description": "Link de pagos de luz" },
+        "gasLink": { "type": "string", "description": "Link de pagos de gas" }
+      },
+      "required": ["name", "address"]
+    },
+    "users": {
+      "title": "Usuarios",
+      "description": "Residentes de los conjuntos.",
+      "type": "object",
+      "properties": {
+        "idNumber": { "type": "string", "description": "Cédula del residente" },
+        "name": { "type": "string", "description": "Nombre completo" },
+        "complexId": { "type": "string", "description": "ID del conjunto asociado" },
+        "role": { "type": "string", "enum": ["resident", "admin"], "description": "Rol del usuario" }
+      },
+      "required": ["idNumber", "name", "complexId"]
+    },
+    "payments": {
+      "title": "Historial de Pagos",
+      "description": "Registro de pagos realizados por los residentes.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "ID del usuario que realizó el pago" },
+        "complexId": { "type": "string", "description": "ID del conjunto" },
+        "amount": { "type": "number", "description": "Monto pagado" },
+        "date": { "type": "string", "format": "date-time", "description": "Fecha del pago" },
+        "concept": { "type": "string", "description": "Concepto del pago (Administración, Agua, etc.)" },
+        "status": { "type": "string", "enum": ["completed", "pending", "failed"], "description": "Estado del pago" }
+      },
+      "required": ["userId", "complexId", "amount", "date", "concept"]
+    }
+  },
+  "firestore": {
+    "/complexes/{complexId}": {
+      "schema": "complexes",
+      "description": "Colección de conjuntos residenciales"
+    },
+    "/users/{userId}": {
+      "schema": "users",
+      "description": "Colección de usuarios/residentes"
+    },
+    "/payments/{paymentId}": {
+      "schema": "payments",
+      "description": "Colección de pagos"
+    }
+  }
+}
